@@ -30,8 +30,8 @@
 
 ## 使用指南
 使用方法
-   1. 将 `muxia` 开头的 js 文件复制到 `..\Yunzai-Bot\plugins\example` 目录下
-        2. 将 img 下的文件复制到`..\Yunzai-Bot\resources\img`目录下，`resources`目录下没有`img`目录,自行新建一个 
+1.将  js 文件复制到 `..\Yunzai-Bot\plugins\example` 目录下
+   
 ## 更新日志
 - 2024-8-12 添加制作
 **cosplay插件**，**表白插件**，**纯欲视频插件**，**快手女大视频插件**，**猫猫图片插件**，**撒娇语言插件**，**随机小姐姐视频插件**，**诱惑图插件**
