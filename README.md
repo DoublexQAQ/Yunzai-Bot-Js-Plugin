@@ -29,8 +29,8 @@
 - 诱惑图插件
 
 ## 使用指南
-使用方法
-1.将  js 文件复制到 `..\Yunzai-Bot\plugins\example` 目录下
+使用方法：
+将  js 文件复制到 `..\Yunzai-Bot\plugins\example` 目录下
    
 ## 更新日志
 - 2024-8-12 添加制作
