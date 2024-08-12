@@ -15,6 +15,7 @@
 ---
 
 ### 如果觉得本项目好用，点一个 star 吧
+### 我的（爱发电）[https://afdian.com/a/DoubleQAQ]
 
 
 
