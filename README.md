@@ -1,4 +1,4 @@
-# yunzai-bot-js-plug-in-component
+# yunzai-bot-js-plugin
 本插件库由个人制作
 <p align="center">
   <a href="https://github.com/DoublexQAQ/">
@@ -12,6 +12,7 @@
 <div align="center">
 
 [![Page Views Count](https://badges.toozhao.com/badges/01J532W0PRBBYEANY0Q6VKD6FP/green.svg)](https://badges.toozhao.com/stats/01J532W0PRBBYEANY0Q6VKD6FP "Get your own page views count badge on badges.toozhao.com")
+---
 
 ### 如果觉得本项目好用，点一个 star 吧
 
