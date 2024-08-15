@@ -1,5 +1,5 @@
 # yunzai-bot-js-plugin
-##本插件库由个人制作，本人没学过JavaScript语言，纯小白一个，有错误的地方还请大佬多多谅解
+## 本插件库由个人制作，本人没学过JavaScript语言，纯小白一个，有错误的地方还请大佬多多谅解
 
 
 [![Page Views Count](https://badges.toozhao.com/badges/01J532W0PRBBYEANY0Q6VKD6FP/green.svg)](https://badges.toozhao.com/stats/01J532W0PRBBYEANY0Q6VKD6FP "Get your own page views count badge on badges.toozhao.com")
