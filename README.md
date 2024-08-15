@@ -1,13 +1,5 @@
 # yunzai-bot-js-plugin
 本插件库由个人制作
-<p align="center">
-  <a href="https://github.com/DoublexQAQ/">
-    <img width="200" src="https://raw.githubusercontent.com/MuXia-0326/YunzaiBotJsPluginMuXia/master/readme/project_logo.png">
-  </a>
-</p>
-
-
-</div>
 
 
 [![Page Views Count](https://badges.toozhao.com/badges/01J532W0PRBBYEANY0Q6VKD6FP/green.svg)](https://badges.toozhao.com/stats/01J532W0PRBBYEANY0Q6VKD6FP "Get your own page views count badge on badges.toozhao.com")
