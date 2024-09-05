@@ -20,7 +20,7 @@ export class example extends plugin {
 
   async start(e) {
     e.reply('正在发送又纯又欲视频')
-    e.reply(segment.video('https://api.qtkj.love/api/ycyy.php?type=mp4'))
+    e.reply(segment.video(''))
     //api地址可自行更改
     return true
 }

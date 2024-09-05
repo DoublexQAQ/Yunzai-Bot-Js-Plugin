@@ -20,10 +20,22 @@ export class biaobai extends plugin {
         })
     }
     async biaobai(e) {
-         e.reply('撒花！Ｏ(≧▽≦)Ｏ ，在一起！在一起！')
-         e.reply(segment.image('https://api.qtkj.love/api/shouxie/tu_shouxie_lyyai.php?type=image&text=你'))
-         e.reply('有情人终成眷属！！！')
-         e.reply(segment.image('https://api.qtkj.love/api/shouxie/tu_shouxie_ai.php?type=image&text=你的'))
-         return true
+    // 创建一个包含所有回复内容的数组
+    const replies = [
+        '撒花！Ｏ(≧▽≦)Ｏ ，在一起！在一起！',
+        segment.image('https://shanhe.kim/api/qq/ju2.php?msg=喜欢你'),
+        '有情人终成眷属！！！',
+        segment.image('https://www.hhlqilongzhu.cn/api/tu_aijbkc.php?name=答应我')
+    ];
+
+    // 生成一个0到回复数组长度之间的随机索引
+    const randomIndex = Math.floor(Math.random() * replies.length);
+
+    // 根据随机索引发送一个随机的回复
+    e.reply(replies[randomIndex]);
+
+    return true;
 }
+
+
 }
