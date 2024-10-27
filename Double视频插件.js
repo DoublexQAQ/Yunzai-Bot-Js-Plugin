@@ -1,5 +1,5 @@
-//作者:Double,github:https://github.com/DoublexQAQ
-//本JS插件仅作交流学习。
+// 作者: Double, Github: https://github.com/DoublexQAQ
+// 本 JS 插件仅用于交流学习。
 import plugin from '../../lib/plugins/plugin.js';
 
 export default class ExamplePlugin extends plugin {
@@ -10,502 +10,209 @@ export default class ExamplePlugin extends plugin {
       event: 'message',
       priority: -5000,
       rule: [
-       { reg: '^#视频列表',fnc: 'sp1'},
-       { reg: "^#黑丝视频", fnc: "sp2" },
-       { reg: "^#白丝视频", fnc: "sp3" },
-       { reg: "^#甩裙视频", fnc: "sp4" },
-       { reg: "^#纯欲视频", fnc: "sp5" },
-       { reg: "^#卡点变装视频", fnc: "sp6" },
-       { reg: "^#感觉至上视频", fnc: "sp7" },
-       { reg: "^#少萝视频", fnc: "sp8" },
-       { reg: "^#吊带视频", fnc: "sp9" },
-       { reg: "^#萝莉视频", fnc: "sp10" },
-       { reg: "^#甜妹视频", fnc: "sp11" },
-       { reg: "^#漫画欲系视频", fnc: "sp12" },
-       { reg: "^#黑白双煞视频", fnc: "sp13" },
-       { reg: "^#热舞视频", fnc: "sp14"},
-       { reg: "^#漫展视频", fnc: "sp15"},
-       { reg: "^#玉足视频", fnc: "sp16" },
-       { reg: "^#清纯视频", fnc: "sp17" },
-       { reg: "^#小姐姐视频", fnc: "sp18" },
-       { reg: "^#慢摇视频", fnc: "sp19" },
-       { reg: "^#cosplay视频", fnc: "sp20" },
-       { reg: "^#原神cos视频", fnc: "sp21" },
-       { reg: "^#(群主视频|管理视频)", fnc: "sp22" },
-       { reg: "^#大雷视频", fnc: "sp23" },
+        { reg: '^#视频列表', fnc: 'sp1' },
+        { reg: '^#(黑丝|白丝|甩裙|纯欲|卡点变装|感觉至上|少萝|吊带|萝莉|甜妹|漫画欲系|黑白双煞|热舞|漫展|玉足|清纯|小姐姐|慢摇|cosplay|原神cos|大雷|美女|JK|女仆)视频(,|，|和|与| )*', fnc: 'multiVideoHandler' },
+        { reg: '^#来(\\d+)个(黑丝|白丝|甩裙|纯欲|卡点变装|感觉至上|少萝|吊带|萝莉|甜妹|漫画欲系|黑白双煞|热舞|漫展|玉足|清纯|小姐姐|慢摇|cosplay|原神cos|大雷|美女|JK|女仆)视频$', fnc: 'multipleSameVideos' }
       ]
-    })
+    });
+
+    // 视频类型与API地址的映射
+    this.videoMapping = {
+      "黑丝": "http://api.ovoe.top/API/hssp.php?type=mp4",
+      "白丝": "http://api.ovoe.top/API/bssp.php",
+      "甩裙": "http://api.ovoe.top/API/sqxl.php",
+      "纯欲": "http://api.ovoe.top/API/ycyy.php",
+      "卡点变装": "http://api.ovoe.top/API/kdbz.php",
+      "感觉至上": "http://api.ovoe.top/API/gjzs.php",
+      "少萝": "http://api.ovoe.top/API/slxl.php",
+      "吊带": "http://api.ovoe.top/API/ddxl.php",
+      "萝莉": "http://api.ovoe.top/API/llxl.php",
+      "甜妹": "http://api.yujn.cn/api/tianmei.php?type=video",
+      "漫画欲系": "http://api.ovoe.top/API/mhyx.php",
+      "黑白双煞": "http://api.ovoe.top/API/hbss.php",
+      "热舞": "http://api.yujn.cn/api/rewu.php?type=video",
+      "漫展": "https://api.yujn.cn/api/manzhan.php?type=video",
+      "玉足": "http://api.yujn.cn/api/yuzu.php?type=video",
+      "清纯": "http://api.yujn.cn/api/qingchun.php?type=video",
+      "小姐姐": "http://api.yujn.cn/api/zzxjj.php?type=video",
+      "慢摇": "http://api.yujn.cn/api/manyao.php?type=video",
+      "cosplay": "http://abc.gykj.asia/API/ntCOS.php",
+      "原神cos": "http://abc.gykj.asia/API/ysxl.php",
+      "大雷": "http://x4f5rt.site/API/dl/sp.api.php",
+      "美女": "https://api.s01s.cn/API/lsp_meinv/",
+      "JK": "https://api.s01s.cn/API/jk_shipin/",
+      "女仆": "https://api.317ak.com/API/sp/npxl.php ",
+    };
   }
 
+  // 发送伪造消息的工具方法
+  async buildForwardMsg(e, messages, friend) {
+    let bot = {
+      nickname: e.sender.nickname,
+      user_id: e.user_id
+    };
+    let MsgList = messages.map(msg => ({
+      message: msg,
+      ...bot,
+    }));
+
+    let msg;
+    if (e.message_type === 'group') {
+      msg = await e.group.makeForwardMsg(MsgList);
+    } else {
+      msg = await friend.makeForwardMsg(MsgList);
+    }
+
+    return msg;
+  }
+
+  // 发送视频列表
   async sp1(e) {
-    let msg = ["视频列表： \n #黑丝视频 \n #白丝视频 \n #甩裙视频 \n #纯欲视频 \n #卡点变装视频 \n #感觉至上视频 \n #少萝视频 \n #吊带视频 \n #萝莉视频 \n #甜妹视频 \n #漫画欲系视频 \n #黑白双煞视频 \n #热舞视频 \n #漫展视频 \n #玉足视频 \n #清纯视频 \n #小姐姐视频 \n #慢摇视频 \n #cosplay视频 \n #原神cos视频 \n #大雷视频"]
-    e.reply(msg,msg);
-    return;
-}
-  async sp2(e) {
-    if (e.message_type === 'group') {
-        let msg = ["黑丝视频正在发送，请等待。"];
-        // 发送随机消息内容
-        e.reply(msg,msg);
-        // 构建 fakeMsgArr 数组
-        let fakeMsgArr = ["http://api.ovoe.top/API/hssp.php?type=mp4"];
-        fakeMsgArr.push({
-            user_id: e.member.user_id,
-            nickname: e.member.nickname,
-            message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-        });
-        // 创建转发消息
-        let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-        // 发送转发消息
-        e.reply(makeForwardMsg);
-    } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/hssp.php?type=mp4"))
+    const videoTypes = [
+      "黑丝", "白丝", "甩裙", "纯欲", "卡点变装", 
+      "感觉至上", "少萝", "吊带", "萝莉", "甜妹", 
+      "漫画欲系", "黑白双煞", "热舞", "漫展", "玉足", 
+      "清纯", "小姐姐", "慢摇", "cosplay", "原神cos", 
+      "大雷", "美女", "JK", "女仆"
+    ];
+
+    const messages = videoTypes.map(type => `#${type}视频`); // 生成伪造消息内容
+
+    // 设置标题、提示和总结
+    const title = "视频列表";
+    const hint = "好看的视频";
+    const summary = `视频数量: ${videoTypes.length}`;
+
+    // 构造伪造消息
+    const fakeMsgArr = messages.map(msg => ({
+      message: msg,
+      user_id: e.user_id,
+    }));
+
+    try {
+      // 优化 msg.data 结构
+      const forwardMsg = await e.group.makeForwardMsg(fakeMsgArr);
+      if (forwardMsg.data && typeof forwardMsg.data === 'object') {
+        const detail = forwardMsg.data.meta.detail;
+        if (detail) {
+          detail.news = [{ text: hint }]; // 用提示信息替代原来的内容
+          detail.source = title; // 设置来源为标题
+          detail.summary = summary; // 设置总结信息
+        }
+        forwardMsg.data.prompt = hint; // 设置 prompt
+      }
+
+      await e.reply(forwardMsg);
+    } catch (error) {
+      e.reply('视频列表发送失败，请稍后再试。');
+      console.error(`视频列表发送失败: ${error.message}`, error);
     }
-    return;
-}
-async sp3(e) {
-     if (e.message_type === 'group') {
-    let msg = ["白丝视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-     let fakeMsgArr = ["http://api.ovoe.top/API/bssp.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/bssp.php"))
+  }
+
+  // 发送伪造消息的工具方法
+  async sendMultiVideo(e, videoList) {
+    const fakeMsgArr = [];
+
+    // 添加伪造内容
+    for (const video of videoList) {
+      const { apiUrl } = video;
+      fakeMsgArr.push({
+        message: segment.video(apiUrl),
+        user_id: e.user_id,
+      });
     }
-    return;
-}
-async sp4(e) {
-    if (e.message_type === 'group') {
-    let msg = ["甩裙视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.ovoe.top/API/sqxl.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-    } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/sqxl.php"))
-    }
-    return;
-}
-  async sp5(e) {
+
+    // 添加到 msg.data 的结构
+    const title = videoList[0].videoName; // 使用第一个视频名称作为标题
+    const hint = `请求的视频数量: ${videoList.length}`;
+    const summary = `老色批你要的视频: ${title}，数量: ${videoList.length}`;
+
+    try {
+      // 群聊中伪造消息
       if (e.message_type === 'group') {
-    let msg = ["纯欲视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.ovoe.top/API/ycyy.php"]
-   fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
+        const forwardMsg = await e.group.makeForwardMsg(fakeMsgArr);
+        
+        // 优化 msg.data 结构
+        if (forwardMsg.data && typeof forwardMsg.data === 'object') {
+          const detail = forwardMsg.data.meta.detail;
+          if (detail) {
+            detail.news = [{ text: hint }]; // 用提示信息替代原来的内容
+            detail.source = title; // 设置来源为标题
+            detail.summary = summary; // 设置总结信息
+          }
+          forwardMsg.data.prompt = hint; // 设置 prompt
+        }
+
+        await e.reply(forwardMsg);
       } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/ycyy.php"))
+        // 私聊中直接发送视频
+        for (const video of videoList) {
+          await e.reply(segment.video(video.apiUrl));
+        }
+      }
+    } catch (error) {
+      e.reply('视频发送失败，请稍后再试。');
+      console.error(`视频转发消息发送失败: ${error.message}`, error);
     }
-    return;
-}
-async sp6(e) {
-    if (e.message_type === 'group') {
-    let msg = ["卡点变装视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.ovoe.top/API/kdbz.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-    } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/kdbz.php"))
-    }
-    return;
-}
-async sp7(e) {
-    if (e.message_type === 'group') {
-    let msg = ["感觉至上视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.ovoe.top/API/gjzs.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-    } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/gjzs.php"))
-    }
-    return;
-}
-async sp8(e) {
-    if (e.message_type === 'group') {
-    let msg = ["少萝视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.ovoe.top/API/slxl.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-    } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/slxl.php"))
-    }
-    return;
-}
-async sp9(e) {
-    if (e.message_type === 'group') {
-    let msg = ["吊带视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.ovoe.top/API/ddxl.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-    } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/ddxl.php"))
-    }
-    return;
-}
+  }
 
-async sp10(e) {
-     if (e.message_type === 'group') {
-    let msg = ["萝莉视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.ovoe.top/API/llxl.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/llxl.php"))
-    }
-    return;
-}
-async sp11(e) {
-     if (e.message_type === 'group') {
-    let msg = ["甜妹视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.yujn.cn/api/tianmei.php?type=video"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.yujn.cn/api/tianmei.php?type=video"))
-    }
-    return;
-}
- async sp12(e) {
-     if (e.message_type === 'group') {
-    let msg = ["漫画欲系视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.ovoe.top/API/mhyx.php"]
-   fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/mhyx.php"))
-    }
-    return;
-}
-async sp13(e) {
-     if (e.message_type === 'group') {
-    let msg = ["黑白双煞视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.ovoe.top/API/hbss.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.ovoe.top/API/hbss.php"))
-    }
-    return;
-}
- async sp14(e) {
-     if (e.message_type === 'group') {
-    let msg = ["热舞视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.yujn.cn/api/rewu.php?type=video"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.yujn.cn/api/rewu.php?type=video"))
-    }
-    return;
-}
-async sp15(e) {
-     if (e.message_type === 'group') {
-    let msg = ["漫展视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["https://api.yujn.cn/api/manzhan.php?type=video"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("https://api.yujn.cn/api/manzhan.php?type=video"))
-    }
-    return;
-}
- async sp16(e) {
-     if (e.message_type === 'group') {
-    let msg = ["玉足视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 20));
-    let fakeMsgArr = ["http://api.yujn.cn/api/yuzu.php?type=video"]
-   fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.yujn.cn/api/yuzu.php?type=video"))
-    }
-    return;
-}
-  async sp17(e) {
-     if (e.message_type === 'group') {
-    let msg = ["清纯视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 20));
-    let fakeMsgArr = ["http://api.yujn.cn/api/qingchun.php?type=video"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.yujn.cn/api/qingchun.php?type=video"))
-    }
-    return;
-}
-  async sp18(e) {
-     if (e.message_type === 'group') {
-    let msg = ["小姐姐视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 20));
-    let fakeMsgArr = ["http://api.yujn.cn/api/zzxjj.php?type=video"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.yujn.cn/api/zzxjj.php?type=video"))
-    }
-    return;
-}
-  async sp19(e) {
-     if (e.message_type === 'group') {
-    let msg = ["慢摇视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.yujn.cn/api/manyao.php?type=video"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.yujn.cn/api/manyao.php?type=video"))
-    }
-    return;
-}
-  async sp20(e) {
-     if (e.message_type === 'group') {
-    let msg = ["cosplay视频正在发送，请等待。"]; 
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://abc.gykj.asia/API/ntCOS.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://abc.gykj.asia/API/ntCOS.php"))
-    }
-    return;
-}
-  async sp21(e) {
-     if (e.message_type === 'group') {
-    let msg = ["原神cos视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://abc.gykj.asia/API/ysxl.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://abc.gykj.asia/API/ysxl.php"))
-    }
-    return;
-}
-  async sp22(e) {
-     if (e.message_type === 'group') {
-    let msg = ["视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://api.yujn.cn/api/jksp.php?type=video"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://api.yujn.cn/api/jksp.php?type=video"))
-    }
-    return;
-}
- async sp23(e) {
-     if (e.message_type === 'group') {
-    let msg = ["大雷视频正在发送，请等待。"];
-    e.reply(msg,msg);
-    await new Promise(resolve => setTimeout(resolve, 10));
-    let fakeMsgArr = ["http://x4f5rt.site/API/dl/sp.api.php"]
-    fakeMsgArr.push({
-        user_id: e.member.user_id,
-        nickname: e.member.nickname,
-        message: segment.video(fakeMsgArr[0]) // 传入数组中的第一个元素
-    });
-    // 创建转发消息
-    let makeForwardMsg = e.group.makeForwardMsg([fakeMsgArr[fakeMsgArr.length - 1]]);
-    // 发送转发消息
-    e.reply(makeForwardMsg);
-     } else if (e.message_type === 'private') {
-        // 直接发出api的返回内容
-        e.reply(segment.video("http://x4f5rt.site/API/dl/sp.api.php"))
-    }
-    return;
-}
-}
-  
+  // 处理多个视频的发送
+  async multiVideoHandler(e) {
+    const input = e.msg.replace(/^#/, '').replace(/视频/g, ''); // 去掉命令中的 "#", "视频"
+    const videoRequests = input.split(/,|，|和|与| /); // 根据多个分隔符分割
 
+    const videoList = [];
+    for (const video of videoRequests) {
+      const trimmedVideo = video.trim();
+      const apiUrl = this.videoMapping[trimmedVideo];
+      if (apiUrl) {
+        videoList.push({ videoName: trimmedVideo, apiUrl });
+      } else {
+        e.reply(`无法找到视频: ${trimmedVideo}`);
+      }
+    }
+
+    if (videoList.length > 0) {
+      // 在这里添加提示消息
+      e.reply('视频发送可能会需要一段时间，请耐心等待。');
+      await this.sendMultiVideo(e, videoList); // 一次性发送所有视频
+    }
+  }
+
+  // 处理“来N个相同的视频”指令
+  async multipleSameVideos(e) {
+    const result = e.msg.match(/^#来(\d+)个(黑丝|白丝|甩裙|纯欲|卡点变装|感觉至上|少萝|吊带|萝莉|甜妹|漫画欲系|黑白双煞|热舞|漫展|玉足|清纯|小姐姐|慢摇|cosplay|原神cos|大雷|美女|JK|女仆)视频$/);
+    if (result) {
+      const count = parseInt(result[1], 10); // 获取视频数量
+      const videoType = result[2]; // 获取视频类型
+      
+      // 限制请求的最大数量为5
+      if (count < 1) {
+        e.reply('请求的数量必须大于0。');
+        return;
+      } else if (count > 5) {
+        e.reply('你个老色批，喜欢看这么多吗？');
+        return;
+      }
+
+      const apiUrl = this.videoMapping[videoType];
+
+      if (!apiUrl) {
+        e.reply('无法找到视频，请重新输入。');
+        return;
+      }
+
+      // 提示用户发送可能需要一些时间
+      e.reply('视频发送可能会需要一段时间，请耐心等待。');
+
+      // 构造视频列表
+      const videoList = [];
+      for (let i = 0; i < count; i++) {
+        videoList.push({ videoName: videoType, apiUrl });
+      }
+
+      // 发送多个相同视频
+      await this.sendMultiVideo(e, videoList);
+    }
+  }
+}
