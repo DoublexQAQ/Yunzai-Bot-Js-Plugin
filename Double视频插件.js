@@ -1,5 +1,3 @@
-// 作者: Double, Github: https://github.com/DoublexQAQ
-// 本 JS 插件仅用于交流学习。
 import plugin from '../../lib/plugins/plugin.js';
 
 export default class ExamplePlugin extends plugin {
@@ -11,25 +9,25 @@ export default class ExamplePlugin extends plugin {
       priority: -5000,
       rule: [
         { reg: '^#视频列表', fnc: 'sp1' },
-        { reg: '^#(黑丝|白丝|甩裙|纯欲|卡点变装|感觉至上|少萝|吊带|萝莉|甜妹|漫画欲系|黑白双煞|热舞|漫展|玉足|清纯|小姐姐|慢摇|cosplay|原神cos|大雷|美女|JK|女仆)视频(,|，|和|与| )*', fnc: 'multiVideoHandler' },
-        { reg: '^#来(\\d+)个(黑丝|白丝|甩裙|纯欲|卡点变装|感觉至上|少萝|吊带|萝莉|甜妹|漫画欲系|黑白双煞|热舞|漫展|玉足|清纯|小姐姐|慢摇|cosplay|原神cos|大雷|美女|JK|女仆)视频$', fnc: 'multipleSameVideos' }
+        { reg: '^#(黑丝|白丝|甩裙|纯欲|卡点变装|纯情女高|少萝|吊带|萝莉|甜妹|漫画欲系|黑白双煞|热舞|漫展|玉足|清纯|小姐姐|慢摇|cosplay|原神cos|大雷|美女|JK|女仆|御姐|猫系女友|腹肌|帅哥)视频(,|，|和|与| )*', fnc: 'multiVideoHandler' },
+        { reg: '^#来(\\d+)个(黑丝|白丝|甩裙|纯欲|卡点变装|纯情女高|少萝|吊带|萝莉|甜妹|漫画欲系|黑白双煞|热舞|漫展|玉足|清纯|小姐姐|慢摇|cosplay|原神cos|大雷|美女|JK|女仆|御姐|猫系女友|腹肌|帅哥)视频$', fnc: 'multipleSameVideos' }
       ]
     });
 
     // 视频类型与API地址的映射
     this.videoMapping = {
-      "黑丝": "http://api.ovoe.top/API/hssp.php?type=mp4",
-      "白丝": "http://api.ovoe.top/API/bssp.php",
-      "甩裙": "http://api.ovoe.top/API/sqxl.php",
-      "纯欲": "http://api.ovoe.top/API/ycyy.php",
-      "卡点变装": "http://api.ovoe.top/API/kdbz.php",
-      "感觉至上": "http://api.ovoe.top/API/gjzs.php",
-      "少萝": "http://api.ovoe.top/API/slxl.php",
-      "吊带": "http://api.ovoe.top/API/ddxl.php",
-      "萝莉": "http://api.ovoe.top/API/llxl.php",
+      "黑丝": "https://api.317ak.com/API/sp/hssp.php",//
+      "白丝": "https://api.317ak.com/API/sp/bssp.php",//
+      "甩裙": "https://api.317ak.com/API/sp/sqxl.php",//
+      "纯欲": "https://api.317ak.com/API/sp/ycyy.php",//
+      "卡点变装": "http://x4f5rt.site/API/dxbz/lj.api.php",//
+      "纯情女高": "https://api.317ak.com/API/sp/cqng.php",//
+      "少萝": "http://x4f5rt.site/API/sl/lj.api.php",//
+      "吊带": "https://api.317ak.com/API/sp/ddxl.php",//
+      "萝莉": "https://api.317ak.com/API/sp/llxl.php",//
       "甜妹": "http://api.yujn.cn/api/tianmei.php?type=video",
-      "漫画欲系": "http://api.ovoe.top/API/mhyx.php",
-      "黑白双煞": "http://api.ovoe.top/API/hbss.php",
+      "漫画欲系": "https://api.317ak.com/API/sp/mhyx.php",//
+      "黑白双煞": "https://api.317ak.com/API/sp/hbss.php",//
       "热舞": "http://api.yujn.cn/api/rewu.php?type=video",
       "漫展": "https://api.yujn.cn/api/manzhan.php?type=video",
       "玉足": "http://api.yujn.cn/api/yuzu.php?type=video",
@@ -41,7 +39,11 @@ export default class ExamplePlugin extends plugin {
       "大雷": "http://x4f5rt.site/API/dl/sp.api.php",
       "美女": "https://api.s01s.cn/API/lsp_meinv/",
       "JK": "https://api.s01s.cn/API/jk_shipin/",
-      "女仆": "https://api.317ak.com/API/sp/npxl.php ",
+      "女仆": "https://api.317ak.com/API/sp/npxl.php",
+      "御姐": "https://api.317ak.com/API/sp/yjxl.php",
+      "猫系女友": "https://api.317ak.com/API/sp/mxny.php ",
+      "腹肌":"https://api.317ak.com/API/sp/fjbz.php",
+      "帅哥":"https://api.317ak.com/API/sp/sgxl.php",
     };
   }
 
@@ -70,34 +72,28 @@ export default class ExamplePlugin extends plugin {
   async sp1(e) {
     const videoTypes = [
       "黑丝", "白丝", "甩裙", "纯欲", "卡点变装", 
-      "感觉至上", "少萝", "吊带", "萝莉", "甜妹", 
+      "纯情女高", "少萝", "吊带", "萝莉", "甜妹", 
       "漫画欲系", "黑白双煞", "热舞", "漫展", "玉足", 
       "清纯", "小姐姐", "慢摇", "cosplay", "原神cos", 
-      "大雷", "美女", "JK", "女仆"
+      "大雷", "美女", "JK", "女仆", "御姐" ,"猫系女友",
+      "腹肌","帅哥",
     ];
 
     const messages = videoTypes.map(type => `#${type}视频`); // 生成伪造消息内容
 
-    // 设置标题、提示和总结
     const title = "视频列表";
     const hint = "好看的视频";
     const summary = `视频数量: ${videoTypes.length}`;
 
-    // 构造伪造消息
-    const fakeMsgArr = messages.map(msg => ({
-      message: msg,
-      user_id: e.user_id,
-    }));
-
     try {
+      const forwardMsg = await this.buildForwardMsg(e, messages, e.friend);
       // 优化 msg.data 结构
-      const forwardMsg = await e.group.makeForwardMsg(fakeMsgArr);
       if (forwardMsg.data && typeof forwardMsg.data === 'object') {
         const detail = forwardMsg.data.meta.detail;
         if (detail) {
-          detail.news = [{ text: hint }]; // 用提示信息替代原来的内容
-          detail.source = title; // 设置来源为标题
-          detail.summary = summary; // 设置总结信息
+          detail.news = [{ text: hint }];
+          detail.source = title;
+          detail.summary = summary;
         }
         forwardMsg.data.prompt = hint; // 设置 prompt
       }
@@ -109,8 +105,9 @@ export default class ExamplePlugin extends plugin {
     }
   }
 
-  // 发送伪造消息的工具方法
+  // 将多个视频伪造成一个转发消息发送的方法
   async sendMultiVideo(e, videoList) {
+    e.reply('视频发送可能会需要一段时间，请耐心等待。');
     const fakeMsgArr = [];
 
     // 添加伪造内容
@@ -123,8 +120,8 @@ export default class ExamplePlugin extends plugin {
     }
 
     // 添加到 msg.data 的结构
-    const title = videoList[0].videoName; // 使用第一个视频名称作为标题
-    const hint = `请求的视频数量: ${videoList.length}`;
+    const title = `${videoList[0].videoName}视频`; // 使用第一个视频名称作为标题，并添加 "视频"
+    const hint = `${videoList[0].videoName}的诱惑`;
     const summary = `老色批你要的视频: ${title}，数量: ${videoList.length}`;
 
     try {
@@ -136,14 +133,14 @@ export default class ExamplePlugin extends plugin {
         if (forwardMsg.data && typeof forwardMsg.data === 'object') {
           const detail = forwardMsg.data.meta.detail;
           if (detail) {
-            detail.news = [{ text: hint }]; // 用提示信息替代原来的内容
-            detail.source = title; // 设置来源为标题
-            detail.summary = summary; // 设置总结信息
+            detail.news = [{ text: hint }];
+            detail.source = title;
+            detail.summary = summary;
           }
           forwardMsg.data.prompt = hint; // 设置 prompt
         }
 
-        await e.reply(forwardMsg);
+        await e.reply(forwardMsg); // 发送伪造消息
       } else if (e.message_type === 'private') {
         // 私聊中直接发送视频
         for (const video of videoList) {
@@ -151,7 +148,41 @@ export default class ExamplePlugin extends plugin {
         }
       }
     } catch (error) {
-      e.reply('视频发送失败，请稍后再试。');
+      // 处理 API 错误
+      const errorTitle = "发送错误";
+      const errorHint = "API 问题";
+      const errorSummary = "天天看，现在看不了吧";
+
+      const fakeErrorMsg = {
+        message: errorTitle,
+      };
+
+      // 在这里添加伪造错误消息
+      const fakeMsgArr = [{
+        message: JSON.stringify(fakeErrorMsg),
+        user_id: e.user_id,
+      }];
+
+      try {
+        const forwardMsg = await e.group.makeForwardMsg(fakeMsgArr);
+        
+        // 优化 msg.data 结构
+        if (forwardMsg.data && typeof forwardMsg.data === 'object') {
+          const detail = forwardMsg.data.meta.detail;
+          if (detail) {
+            detail.news = [{ text: errorHint }];
+            detail.source = errorTitle;
+            detail.summary = errorSummary;
+          }
+          forwardMsg.data.prompt = errorHint; // 设置 prompt
+        }
+
+        await e.reply(forwardMsg); // 发送错误伪造消息
+      } catch (msgError) {
+        // 处理转发消息失败的情况
+        console.error(`伪造错误消息发送失败: ${msgError.message}`, msgError);
+      }
+
       console.error(`视频转发消息发送失败: ${error.message}`, error);
     }
   }
@@ -163,56 +194,39 @@ export default class ExamplePlugin extends plugin {
 
     const videoList = [];
     for (const video of videoRequests) {
-      const trimmedVideo = video.trim();
-      const apiUrl = this.videoMapping[trimmedVideo];
-      if (apiUrl) {
-        videoList.push({ videoName: trimmedVideo, apiUrl });
-      } else {
-        e.reply(`无法找到视频: ${trimmedVideo}`);
+      if (this.videoMapping[video]) {
+        videoList.push({
+          videoName: video,
+          apiUrl: this.videoMapping[video]
+        });
       }
     }
 
     if (videoList.length > 0) {
-      // 在这里添加提示消息
-      e.reply('视频发送可能会需要一段时间，请耐心等待。');
-      await this.sendMultiVideo(e, videoList); // 一次性发送所有视频
-    }
-  }
-
-  // 处理“来N个相同的视频”指令
-  async multipleSameVideos(e) {
-    const result = e.msg.match(/^#来(\d+)个(黑丝|白丝|甩裙|纯欲|卡点变装|感觉至上|少萝|吊带|萝莉|甜妹|漫画欲系|黑白双煞|热舞|漫展|玉足|清纯|小姐姐|慢摇|cosplay|原神cos|大雷|美女|JK|女仆)视频$/);
-    if (result) {
-      const count = parseInt(result[1], 10); // 获取视频数量
-      const videoType = result[2]; // 获取视频类型
-      
-      // 限制请求的最大数量为5
-      if (count < 1) {
-        e.reply('请求的数量必须大于0。');
-        return;
-      } else if (count > 5) {
-        e.reply('你个老色批，喜欢看这么多吗？');
-        return;
-      }
-
-      const apiUrl = this.videoMapping[videoType];
-
-      if (!apiUrl) {
-        e.reply('无法找到视频，请重新输入。');
-        return;
-      }
-
-      // 提示用户发送可能需要一些时间
-      e.reply('视频发送可能会需要一段时间，请耐心等待。');
-
-      // 构造视频列表
-      const videoList = [];
-      for (let i = 0; i < count; i++) {
-        videoList.push({ videoName: videoType, apiUrl });
-      }
-
-      // 发送多个相同视频
       await this.sendMultiVideo(e, videoList);
+    } else {
+      e.reply('未找到对应的视频类型，请确认输入的内容。');
     }
   }
+
+  // 处理相同类型视频的请求
+  async multipleSameVideos(e) {
+    let num = parseInt(e.msg.match(/(\d+)/)[1], 10); // 获取数量并转换为整数
+
+    // 如果数量超过 6，发送调侃提示并返回
+    if (num > 6) {
+        await e.reply("老色批你看到了这么多吗？");
+        return;
+    }
+
+    const videoType = e.msg.match(/(黑丝|白丝|甩裙|纯欲|卡点变装|纯情女高|少萝|吊带|萝莉|甜妹|漫画欲系|黑白双煞|热舞|漫展|玉足|清纯|小姐姐|慢摇|cosplay|原神cos|大雷|美女|JK|女仆|御姐|猫系女友|腹肌|帅哥)/)[1]; // 获取视频类型
+
+    const videoRequests = Array.from({ length: num }, () => videoType); // 生成相同类型请求的数组
+    const videoList = videoRequests.map(video => ({
+        videoName: video,
+        apiUrl: this.videoMapping[video]
+    }));
+
+    await this.sendMultiVideo(e, videoList);
+    }
 }
